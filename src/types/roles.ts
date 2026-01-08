@@ -33,7 +33,7 @@ export const rolePermissions: Record<UserRole, RolePermissions> = {
   [UserRole.ADMIN]: {
     canView: true,
     canEdit: true,
-    canDelete: false,
+    canDelete: true,
     canManageUsers: true,
     canExportData: true,
     canAccessAllDashboards: true

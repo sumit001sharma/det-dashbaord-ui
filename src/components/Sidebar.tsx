@@ -11,7 +11,8 @@ import {
   Menu,
   X,
   Settings,
-  BarChart3
+  BarChart3,
+  Building2
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -22,54 +23,80 @@ interface NavItem {
   adminOnly?: boolean;
 }
 
+interface NavCategory {
+  title: string;
+  items: NavItem[];
+}
+
 export default function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const location = useLocation();
   const { hasPermission } = useAuth();
 
-  const navItems: NavItem[] = [
+  const navCategories: NavCategory[] = [
     {
-      name: 'Overview',
-      path: '/',
-      icon: <LayoutDashboard size={20} />
+      title: 'Organization',
+      items: [
+        {
+          name: 'DET Entities',
+          path: '/',
+          icon: <Building2 size={20} />
+        },
+        {
+          name: 'Overview',
+          path: '/overview',
+          icon: <LayoutDashboard size={20} />
+        }
+      ]
     },
     {
-      name: 'Analytics Dashboard',
-      path: '/analytics',
-      icon: <BarChart3 size={20} />
+      title: 'Dashboards',
+      items: [
+        {
+          name: 'Analytics Dashboard',
+          path: '/analytics',
+          icon: <BarChart3 size={20} />
+        },
+        {
+          name: 'Tourism Dashboard',
+          path: '/tourism',
+          icon: <Plane size={20} />
+        },
+        {
+          name: 'FDI Dashboard',
+          path: '/fdi',
+          icon: <TrendingUp size={20} />
+        },
+        {
+          name: 'Hotel Performance',
+          path: '/hotel-performance',
+          icon: <Hotel size={20} />
+        }
+      ]
     },
     {
-      name: 'Tourism Dashboard',
-      path: '/tourism',
-      icon: <Plane size={20} />
-    },
-    {
-      name: 'FDI Dashboard',
-      path: '/fdi',
-      icon: <TrendingUp size={20} />
-    },
-    {
-      name: 'Hotel Performance',
-      path: '/hotel-performance',
-      icon: <Hotel size={20} />
-    },
-    {
-      name: 'Settings',
-      path: '/settings',
-      icon: <Settings size={20} />
-    },
-    {
-      name: 'Admin Dashboard',
-      path: '/admin',
-      icon: <Settings size={20} />,
-      adminOnly: true
+      title: 'System',
+      items: [
+        {
+          name: 'Settings',
+          path: '/settings',
+          icon: <Settings size={20} />
+        },
+        {
+          name: 'Admin Dashboard',
+          path: '/admin',
+          icon: <Settings size={20} />,
+          adminOnly: true
+        }
+      ]
     }
   ];
 
-  const filteredNavItems = navItems.filter(item => 
-    !item.adminOnly || hasPermission('canManageUsers')
-  );
+  const filteredCategories = navCategories.map(category => ({
+    ...category,
+    items: category.items.filter(item => !item.adminOnly || hasPermission('canManageUsers'))
+  })).filter(category => category.items.length > 0);
 
   const isActive = (path: string) => {
     return location.pathname === path;
@@ -131,32 +158,50 @@ export default function Sidebar() {
           </div>
 
           {/* Navigation Items */}
-          <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
-            {filteredNavItems.map((item) => (
-              <NavLink
-                key={item.path}
-                to={item.path}
-                className={`
-                  flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200
-                  ${isActive(item.path)
-                    ? 'bg-det-primary text-white shadow-md'
-                    : 'text-gray-700 hover:bg-gray-100'
-                  }
-                  ${isCollapsed ? 'justify-center' : ''}
-                `}
-              >
-                {item.icon}
+          <nav className="flex-1 p-4 space-y-6 overflow-y-auto">
+            {filteredCategories.map((category, categoryIndex) => (
+              <div key={category.title}>
                 {!isCollapsed && (
-                  <motion.span
+                  <motion.h3
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="font-medium"
+                    className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-4"
                   >
-                    {item.name}
-                  </motion.span>
+                    {category.title}
+                  </motion.h3>
                 )}
-              </NavLink>
+                {isCollapsed && categoryIndex > 0 && (
+                  <div className="border-t border-gray-200 mb-2" />
+                )}
+                <div className="space-y-1">
+                  {category.items.map((item) => (
+                    <NavLink
+                      key={item.path}
+                      to={item.path}
+                      className={`
+                        flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200
+                        ${isActive(item.path)
+                          ? 'bg-det-primary text-white shadow-md'
+                          : 'text-gray-700 hover:bg-gray-100'
+                        }
+                        ${isCollapsed ? 'justify-center' : ''}
+                      `}
+                    >
+                      {item.icon}
+                      {!isCollapsed && (
+                        <motion.span
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          className="font-medium"
+                        >
+                          {item.name}
+                        </motion.span>
+                      )}
+                    </NavLink>
+                  ))}
+                </div>
+              </div>
             ))}
           </nav>
         </div>
@@ -194,32 +239,45 @@ export default function Sidebar() {
           </div>
 
           {/* Navigation Items */}
-          <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
-            {filteredNavItems.map((item) => (
-              <NavLink
-                key={item.path}
-                to={item.path}
-                onClick={() => setIsMobileOpen(false)}
-                className={`
-                  flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200
-                  ${isActive(item.path)
-                    ? 'bg-det-primary text-white shadow-md'
-                    : 'text-gray-700 hover:bg-gray-100'
-                  }
-                `}
-              >
-                <span className={isActive(item.path) ? 'text-white' : 'text-det-primary'}>
-                  {item.icon}
-                </span>
-                <motion.span
+          <nav className="flex-1 p-4 space-y-6 overflow-y-auto">
+            {filteredCategories.map((category) => (
+              <div key={category.title}>
+                <motion.h3
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="font-medium"
+                  className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-4"
                 >
-                  {item.name}
-                </motion.span>
-              </NavLink>
+                  {category.title}
+                </motion.h3>
+                <div className="space-y-1">
+                  {category.items.map((item) => (
+                    <NavLink
+                      key={item.path}
+                      to={item.path}
+                      onClick={() => setIsMobileOpen(false)}
+                      className={`
+                        flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200
+                        ${isActive(item.path)
+                          ? 'bg-det-primary text-white shadow-md'
+                          : 'text-gray-700 hover:bg-gray-100'
+                        }
+                      `}
+                    >
+                      <span className={isActive(item.path) ? 'text-white' : 'text-det-primary'}>
+                        {item.icon}
+                      </span>
+                      <motion.span
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="font-medium"
+                      >
+                        {item.name}
+                      </motion.span>
+                    </NavLink>
+                  ))}
+                </div>
+              </div>
             ))}
           </nav>
 

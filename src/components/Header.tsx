@@ -17,9 +17,7 @@ export default function Header() {
   };
 
   const handleNotifications = () => {
-    // For now, navigate to a notifications page or show a modal
-    // You can implement a notifications dropdown/modal here
-    console.log('Notifications clicked');
+    navigate('/notifications');
     setShowMobileMenu(false);
   };
 

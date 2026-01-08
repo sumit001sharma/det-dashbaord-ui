@@ -7,6 +7,8 @@ import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import Login from './pages/Login';
 import Overview from './pages/Overview';
+import DETEntities from './pages/DETEntities';
+import Notifications from './pages/Notifications';
 import AnalyticsDashboard from './pages/AnalyticsDashboard';
 import TourismDashboard from './pages/TourismDashboard';
 import FDIDashboard from './pages/FDIDashboard';
@@ -45,7 +47,37 @@ function AppContent() {
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.5 }}
                   >
+                    <DETEntities />
+                  </motion.main>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/overview"
+              element={
+                <ProtectedRoute>
+                  <motion.main 
+                    className="container mx-auto px-4 py-8"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                  >
                     <Overview />
+                  </motion.main>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/notifications"
+              element={
+                <ProtectedRoute>
+                  <motion.main 
+                    className="container mx-auto px-4 py-8"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <Notifications />
                   </motion.main>
                 </ProtectedRoute>
               }

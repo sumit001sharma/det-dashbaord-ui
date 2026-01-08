@@ -6,9 +6,9 @@ import { useAuth } from '../context/AuthContext';
 import { UserRole } from '../types/roles';
 
 export default function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [role, setRole] = useState<UserRole>(UserRole.USER);
+  const [email, setEmail] = useState('admin@dubaidet.gov.ae');
+  const [password, setPassword] = useState('DET@2025');
+  const [role, setRole] = useState<UserRole>(UserRole.ADMIN);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -164,7 +164,6 @@ export default function Login() {
                       <option value={UserRole.USER}>User</option>
                       <option value={UserRole.CLIENT}>Client</option>
                       <option value={UserRole.ADMIN}>Admin</option>
-                      <option value={UserRole.SUPER_ADMIN}>Super Admin</option>
                     </select>
                     <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
                       <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

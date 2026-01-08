@@ -10,12 +10,12 @@ interface RoleBadgeProps {
 export default function RoleBadge({ role, size = 'md', showIcon = true }: RoleBadgeProps) {
   const roleConfig = {
     [UserRole.SUPER_ADMIN]: {
-      label: 'Super Admin',
-      icon: Crown,
-      bgColor: 'bg-purple-100',
-      textColor: 'text-purple-800',
-      borderColor: 'border-purple-300',
-      iconColor: 'text-purple-600'
+      label: 'Admin',
+      icon: Shield,
+      bgColor: 'bg-blue-100',
+      textColor: 'text-blue-800',
+      borderColor: 'border-blue-300',
+      iconColor: 'text-blue-600'
     },
     [UserRole.ADMIN]: {
       label: 'Admin',

@@ -268,7 +268,6 @@ export default function Settings() {
                     <option value={UserRole.USER}>User</option>
                     <option value={UserRole.CLIENT}>Client</option>
                     <option value={UserRole.ADMIN}>Admin</option>
-                    <option value={UserRole.SUPER_ADMIN}>Super Admin</option>
                   </select>
                   <div className="flex gap-2">
                     <button
@@ -322,12 +321,11 @@ export default function Settings() {
                         </td>
                         <td className="px-4 py-4">
                           <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                            user.role === UserRole.SUPER_ADMIN ? 'bg-purple-100 text-purple-800' :
-                            user.role === UserRole.ADMIN ? 'bg-blue-100 text-blue-800' :
+                            (user.role === UserRole.SUPER_ADMIN || user.role === UserRole.ADMIN) ? 'bg-blue-100 text-blue-800' :
                             user.role === UserRole.CLIENT ? 'bg-green-100 text-green-800' :
                             'bg-gray-100 text-gray-800'
                           }`}>
-                            {user.role}
+                            {(user.role === UserRole.SUPER_ADMIN || user.role === UserRole.ADMIN) ? 'Admin' : user.role}
                           </span>
                         </td>
                         <td className="px-4 py-4">
